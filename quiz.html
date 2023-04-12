@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bday Quiz</title>
+    <style>
+      body{
+        margin: 0;
+        padding: 0;
+      }
+      #quiz {
+        width: 80%;
+        margin: auto;
+        text-align: center;
+      }
+      body {
+        background-image: url('your-image-url-here');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-color: rgb(0, 0, 0);
+      }
+      
+
+      h1 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        font-family: 'Pacifico', cursive;
+        color: white;
+      }
+      h2{
+        text-align: center;
+        font-size: 32px;
+        margin-top: 10px;
+        font-family: 'Pacifico', cursive;
+        color: white;
+      }
+
+      #question {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: white;
+        font-family: 'Pacifico', cursive;
+      }
+
+      .options {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: 'Pacifico', cursive;
+      }
+
+      button {
+        margin: 5px;
+        padding: 10px 20px;
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 5px;
+        border: none;
+        background-color: #ddd;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #bbb;
+      }
+
+      #submit {
+        margin-top: 20px;
+        padding: 10px 30px;
+        font-size: 20px;
+        font-weight: bold;
+        background-color: #4CAF50;
+        color: white;
+        font-family: 'Pacifico', cursive;
+      }
+
+      .active {
+        background-color: #4CAF50;
+      }
+      @font-face {
+        font-family: 'Lobster';
+        src: url('https://fonts.googleapis.com/css?family=Lobster');
+      }
+    </style>
+  </head>
+  <body>
+    <div id="quiz">
+      <h1>Time For A Quiz</h1>
+      <hr>
+      <div class="heart-icon">&#10084;</div>
+      <p id="question"></p>
+      <div class="options">
+        <button id="option1"></button>
+        <button id="option2"></button>
+        <button id="option3"></button>
+        <button id="option4"></button>
+      </div>
+      <hr>
+      <button id="submit">Submit</button>
+    </div>
+
+    <script>
+      const quizData = [
+        {
+          question: "Which year did we start talking?",
+          options: ["2022", "2016", "2018", "2017"],
+          answer: 3
+        },
+        {
+          question: "Where did we plan to meet in Lulu?",
+          options: ["Fish Section", "Toy Section", "Towel Section", "Chocolate Section"],
+          answer: 3
+        },
+        {
+          question: "Where did we actually meet in Lulu?",
+          options: ["Vegetable Section", "Ice Cream area", "Parking Lot", "Toy Section"],
+          answer: 1
+        },
+        {
+          question: "When did we start dating?",
+          options: ["2023", "2019", "2017", "2020"],
+          answer: 2
+        },
+        {
+          question: "What was the best gift given by me?",
+          options: ["Among us bday card", "May 1st", "portrait", "something else"],
+          answer: 2
+        },
+        {
+          question: "Which phase did you love the best?",
+          options: ["Mom-Son Phase", "Councelor", "Besties", "Dating"],
+          answer: 3
+        },
+        {
+          question: "Why did you think I made this quiz?",
+          options: ["Ran out of ideas", "Trying different", "Easy idea", "Anything else"],
+          answer: 2
+        },
+        {
+          question: "Which bra of yours was my favorite?",
+          options: ["Black", "Blue", "Red", "Pink"],
+          answer: 4
+        },
+        {
+          question: "Which phase did we have the best icha icha",
+          options: ["Mom Son", "Besties", "Dating", "now"],
+          answer: 1
+        },
+        {
+          question: "Where do you wanna go on our first date?",
+          options: ["Coffee", "Movie", "Free roam", "Anywhere"],
+          answer: 1
+        },
+        {
+          question: "What would you like us to do more?",
+          options: ["Talk", "Buck", "Icha Icha", "Cuddle"],
+          answer: 2
+        },
+        {
+          question: "Which phase were we in when we met in Saudi?",
+          options: ["Besties", "Dating", "Mom Son", "First phase"],
+          answer: 4
+        },
+        {
+          question: "Which plateform did we talk the most in?",
+          options: ["Snapchat", "Messenger", "Instagram", "Whatsapp"],
+          answer: 2
+        }
+        
+        
+      ];
+
+      const questionElement = document.getElementById("question");
+      const optionElements = document.querySelectorAll(".options button");
+      const submitButton = document.getElementById("submit");
+
+      
+
+      let currentQuestion = 0;
+      let score = 0;
+
+      function loadQuiz() {
+        deselectOptions();
+        const currentQuizData = quizData[currentQuestion];
+        questionElement.innerText = currentQuizData.question;
+        optionElements[0].innerText = currentQuizData.options[0];
+        optionElements[1].innerText = currentQuizData.options[1];
+        optionElements[2].innerText = currentQuizData.options[2];
+        optionElements[3].innerText = currentQuizData.options[3];
+      }
+      
+      function getSelected() {
+        let answer = undefined;
+        optionElements.forEach((optionElement) => {
+          if (optionElement.classList.contains("active")) {
+            answer = optionElement.id.slice(-1);
+          }
+        });
+        return answer;
+      }
+      
+      function deselectOptions() {
+        optionElements.forEach((optionElement) => {
+          optionElement.classList.remove("active");
+        });
+      }
+      
+      loadQuiz();
+      
+      submitButton.addEventListener("click", () => {
+        const answer = getSelected();
+        if (answer) {
+          if (answer === quizData[currentQuestion].answer) {
+            score++;
+          }
+          currentQuestion++;
+          if (currentQuestion < quizData.length) {
+            loadQuiz();
+          } else {
+            document.body.innerHTML = `
+              <div class="result">
+                <h1>You have completed the quiz!</h1>
+                <h2>Your score is: ${score}/${quizData.length}</h2>
+                <button onclick="location.reload()">Reload</button>
+              </div>
+            `;
+          }
+        }
+      });
+      
+      optionElements.forEach((optionElement) => {
+        optionElement.addEventListener("click", () => {
+          deselectOptions();
+          optionElement.classList.add("active");
+        });
+      });
+      
+    
+      loadQuiz();
+    </script>
+  </body>
+  </html>    
