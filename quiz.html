@@ -168,75 +168,59 @@
           options: ["Snapchat", "Messenger", "Instagram", "Whatsapp"],
           answer: 2
         }
-        
-        
       ];
+const questionElement = document.getElementById("question");
+const optionsElements = document.querySelectorAll(".options button");
+const submitButton = document.getElementById("submit");
 
-      const questionElement = document.getElementById("question");
-      const optionElements = document.querySelectorAll(".options button");
-      const submitButton = document.getElementById("submit");
+let currentQuestionIndex = 0;
+let score = 0;
 
-      
+function showQuestion() {
+  const currentQuestion = quizData[currentQuestionIndex];
+  questionElement.innerText = currentQuestion.question;
+  optionsElements.forEach((option, index) => {
+    option.innerText = currentQuestion.options[index];
+    option.classList.remove("active");
+  });
+}
 
-      let currentQuestion = 0;
-      let score = 0;
+function checkAnswer() {
+  const currentQuestion = quizData[currentQuestionIndex];
+  const selectedOption = document.querySelector(".options button.active");
+  if (selectedOption && selectedOption.innerText === currentQuestion.options[currentQuestion.answer - 1]) {
+    score++;
+  }
+}
 
-      function loadQuiz() {
-        deselectOptions();
-        const currentQuizData = quizData[currentQuestion];
-        questionElement.innerText = currentQuizData.question;
-        optionElements[0].innerText = currentQuizData.options[0];
-        optionElements[1].innerText = currentQuizData.options[1];
-        optionElements[2].innerText = currentQuizData.options[2];
-        optionElements[3].innerText = currentQuizData.options[3];
-      }
-      
-      function getSelected() {
-        let answer = undefined;
-        optionElements.forEach((optionElement) => {
-          if (optionElement.classList.contains("active")) {
-            answer = optionElement.id.slice(-1);
-          }
-        });
-        return answer;
-      }
-      
-      function deselectOptions() {
-        optionElements.forEach((optionElement) => {
-          optionElement.classList.remove("active");
-        });
-      }
-      
-      loadQuiz();
-      
-      submitButton.addEventListener("click", () => {
-        const answer = getSelected();
-        if (answer) {
-          if (answer === quizData[currentQuestion].answer) {
-            score++;
-          }
-          currentQuestion++;
-          if (currentQuestion < quizData.length) {
-            loadQuiz();
-          } else {
-            document.body.innerHTML = `
-              <div class="result">
-                <h1>You have completed the quiz!</h1>
-                <h2>Your score is: ${score}/${quizData.length}</h2>
-                <button onclick="location.reload()">Reload</button>
-              </div>
-            `;
-          }
-        }
-      });
-      
-      optionElements.forEach((optionElement) => {
-        optionElement.addEventListener("click", () => {
-          deselectOptions();
-          optionElement.classList.add("active");
-        });
-      });
-      
+function showResult() {
+  questionElement.innerText = `You scored ${score} out of ${quizData.length}!`;
+  optionsElements.forEach((option) => {
+    option.style.display = "none";
+  });
+  submitButton.style.display = "none";
+}
+
+showQuestion();
+
+submitButton.addEventListener("click", () => {
+  checkAnswer();
+  currentQuestionIndex++;
+  if (currentQuestionIndex < quizData.length) {
+    showQuestion();
+  } else {
+    showResult();
+  }
+});
+
+optionsElements.forEach((option) => {
+  option.addEventListener("click", () => {
+    optionsElements.forEach((otherOption) => {
+      otherOption.classList.remove("active");
+    });
+    option.classList.add("active");
+  });
+});
     
       loadQuiz();
     </script>
